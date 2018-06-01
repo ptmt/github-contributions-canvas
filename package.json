@@ -1,7 +1,7 @@
 {
-  "name": "github-contributions-canvas",
+  "name": "twitter-contributions-canvas",
   "version": "0.2.0",
-  "description": "A tool for drawing a heat-map of Github contributions on HTML Canvas",
+  "description": "A tool for drawing a heat-map of twits contributions on HTML Canvas",
   "main": "dist/index.js",
   "dependencies": {
     "moment": "^2.22.1"
