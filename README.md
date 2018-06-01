@@ -1,3 +1,5 @@
+(this is a fork for Twitter, so `s/Github/Twitter/g`)
+
 # Github Contributions on Canvas [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
 A tool for drawing a heat-map of Github contributions on HTML Canvas.
