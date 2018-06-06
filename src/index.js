@@ -12,7 +12,8 @@ function getTheme(opts = {}) {
 function getDateInfo(data, date) {
   return (
     data.contributions.find(contrib => contrib.date === date) || {
-      intensity: 0
+      intensity: 0,
+      count: 0
     }
   );
 }
