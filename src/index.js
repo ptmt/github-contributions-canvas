@@ -10,7 +10,11 @@ function getTheme(opts = {}) {
 }
 
 function getDateInfo(data, date) {
-  return data.contributions.find(contrib => contrib.date === date);
+  return (
+    data.contributions.find(contrib => contrib.date === date) || {
+      intensity: 0
+    }
+  );
 }
 
 function getContributionCount(graphEntries) {
@@ -63,7 +67,6 @@ function drawYear(ctx, opts = {}) {
       info: getDateInfo(data, date)
     });
   }
-
   graphEntries.push(firstRowDates);
 
   for (let i = 1; i < 7; i += 1) {
@@ -98,9 +101,10 @@ function drawYear(ctx, opts = {}) {
   for (let y = 0; y < graphEntries.length; y += 1) {
     for (let x = 0; x < graphEntries[y].length; x += 1) {
       const day = graphEntries[y][x];
+
       if (moment(day.date) > today || !day.info) {
         continue;
-      }    
+      }
       const color = theme[`grade${day.info.intensity}`];
       ctx.fillStyle = color;
       ctx.fillRect(
@@ -121,7 +125,11 @@ function drawYear(ctx, opts = {}) {
     const monthChanged = month !== lastCountedMonth;
     if (monthChanged && !firstMonthIsDec) {
       ctx.fillStyle = theme.meta;
-      ctx.fillText(date.format('MMM'), offsetX + (boxWidth + boxMargin) * y, offsetY);
+      ctx.fillText(
+        date.format("MMM"),
+        offsetX + (boxWidth + boxMargin) * y,
+        offsetY
+      );
       lastCountedMonth = month;
     }
   }
@@ -149,11 +157,20 @@ function drawMetaData(ctx, opts = {}) {
   // chart legend
   let themeGrades = 5;
   ctx.fillStyle = theme.text;
-  ctx.fillText('Less', width - canvasMargin - (boxWidth + boxMargin) * (themeGrades) - 55, 37);
-  ctx.fillText('More', (width - canvasMargin) - 25, 37);
+  ctx.fillText(
+    "Less",
+    width - canvasMargin - (boxWidth + boxMargin) * themeGrades - 55,
+    37
+  );
+  ctx.fillText("More", width - canvasMargin - 25, 37);
   for (let x = 0; x < 5; x += 1) {
     ctx.fillStyle = theme[`grade${x}`];
-    ctx.fillRect(width - canvasMargin - (boxWidth + boxMargin) * (themeGrades) - 27,textHeight + boxWidth,10,10);
+    ctx.fillRect(
+      width - canvasMargin - (boxWidth + boxMargin) * themeGrades - 27,
+      textHeight + boxWidth,
+      10,
+      10
+    );
     themeGrades -= 1;
   }
 
@@ -182,21 +199,25 @@ export function drawContributions(canvas, opts) {
   ctx.scale(scaleFactor, scaleFactor);
   ctx.textBaseline = "hanging";
 
-  drawMetaData(ctx, {
-    ...opts,
-    width,
-    height
-  });
+  drawMetaData(
+    ctx,
+    Object.assign({}, opts, {
+      width,
+      height
+    })
+  );
 
   data.years.forEach((year, i) => {
     const offsetY = yearHeight * i + canvasMargin + headerHeight;
     const offsetX = canvasMargin;
-    drawYear(ctx, {
-      ...opts,
-      year,
-      offsetX,
-      offsetY,
-      data
-    });
+    drawYear(
+      ctx,
+      Object.assign({}, opts, {
+        year,
+        offsetX,
+        offsetY,
+        data
+      })
+    );
   });
 }
